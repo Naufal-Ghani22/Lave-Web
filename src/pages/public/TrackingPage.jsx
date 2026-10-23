@@ -13,8 +13,10 @@ const METHOD_LABELS = { dijemput: 'Dijemput & diantar', antar_sendiri: 'Antar se
 
 export function TrackingPage() {
   const [params] = useSearchParams();
-  const [code, setCode] = useState(params.get('kode') || '');
-  const [phone, setPhone] = useState('');
+  const initialCode = params.get('kode') || params.get('code') || '';
+  const initialPhone = params.get('telp') || params.get('phone') || '';
+  const [code, setCode] = useState(initialCode);
+  const [phone, setPhone] = useState(initialPhone);
   const [order, setOrder] = useState(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -22,6 +24,12 @@ export function TrackingPage() {
   const requestId = useRef(0);
   const resultRef = useRef(null);
   useEffect(() => () => { requestId.current++; }, []);
+
+  useEffect(() => {
+    if (initialCode && initialPhone) {
+      lookup({ code: initialCode, phone: initialPhone });
+    }
+  }, [initialCode, initialPhone]);
 
   async function lookup(values, refresh = false) {
     const request = ++requestId.current;
@@ -39,6 +47,22 @@ export function TrackingPage() {
     } finally { if (request === requestId.current) setBusy(false); }
   }
 
+  const DEMO_PRESETS = [
+    { label: 'Menunggu', code: 'ORD-202610-0001', phone: '081234567801' },
+    { label: 'Sedang Dijemput', code: 'ORD-202610-0004', phone: '081234567804' },
+    { label: 'Diproses', code: 'ORD-202610-0007', phone: '081234567807' },
+    { label: 'Siap Diantar (Foto)', code: 'ORD-202610-0013', phone: '081234567813' },
+    { label: 'Selesai (Foto)', code: 'ORD-202610-0003', phone: '081234567803' },
+    { label: 'Ditolak', code: 'ORD-202610-0005', phone: '081234567805' },
+    { label: 'Dibatalkan', code: 'ORD-202610-0008', phone: '081234567808' },
+  ];
+
+  const handleSelectPreset = (preset) => {
+    setCode(preset.code);
+    setPhone(preset.phone);
+    lookup({ code: preset.code, phone: preset.phone });
+  };
+
   return (
     <div className="min-h-screen bg-brand-light page-smooth-enter">
       <PageHeader title="Lacak Pesanan" breadcrumb={[{ label: 'Lacak Pesanan' }]} subtitle="Cek tahap perawatan dan lihat hasil sebelum–sesudah sepatu Anda. Tanpa perlu membuat akun." bgImage="/services/white-clean.jpg" />
@@ -48,15 +72,27 @@ export function TrackingPage() {
             <h2 className="text-lg font-semibold text-brand-900">Temukan pesanan Anda</h2>
             <p className="text-sm text-slate-wet mt-2 mb-6 leading-relaxed">Gunakan kode pada struk dan nomor WhatsApp yang dipakai saat memesan.</p>
             <form onSubmit={event => { event.preventDefault(); lookup({ code, phone }); }} className="space-y-4" aria-busy={busy}>
-              <Input label="Kode pesanan" id="tracking-code" placeholder="Contoh: ORD-202610-1234" value={code} maxLength={44} autoCapitalize="characters" autoComplete="off" required disabled={busy} onChange={event => { setCode(event.target.value.toUpperCase()); setOrder(null); setError(''); }} />
+              <Input label="Kode pesanan" id="tracking-code" placeholder="Contoh: ORD-202610-0001" value={code} maxLength={44} autoCapitalize="characters" autoComplete="off" required disabled={busy} onChange={event => { setCode(event.target.value.toUpperCase()); setOrder(null); setError(''); }} />
               <Input label="Nomor WhatsApp" id="tracking-phone" type="tel" inputMode="tel" placeholder="08xx atau +628xx" value={phone} maxLength={22} autoComplete="tel" required disabled={busy} onChange={event => { setPhone(event.target.value); setOrder(null); setError(''); }} />
               <Button type="submit" size="lg" className="w-full gap-2" disabled={busy}><Search size={18} aria-hidden="true" />{busy ? 'Mencari pesanan…' : 'Lacak Pesanan'}</Button>
               {error && <p role="alert" className="text-sm text-danger leading-relaxed">{error}</p>}
             </form>
             <div className="flex gap-2 mt-5 pt-5 border-t border-brand-100 text-xs text-slate-wet leading-relaxed"><ShieldCheck size={18} className="text-brand-600 shrink-0" aria-hidden="true" /><p>Nomor Anda hanya untuk mencocokkan pesanan. Alamat dan catatan internal tidak ditampilkan.</p></div>
             {isTrackingDemo && <div className="mt-5 p-3 rounded-lg bg-brand-light border border-brand-200">
-              <p className="text-xs text-brand-900 leading-relaxed">Mode pengembangan: data contoh, bukan pesanan pelanggan asli.</p>
-              <Button variant="ghost" className="mt-2 px-0 gap-2" disabled={busy} onClick={() => { setCode(DEMO_TRACKING.code); setPhone(DEMO_TRACKING.phone); lookup(DEMO_TRACKING); }}>Coba contoh pelacakan <ArrowRight size={15} /></Button>
+              <p className="text-xs font-semibold text-brand-900 mb-1.5">Demo Berbagai Kondisi Status:</p>
+              <div className="flex flex-wrap gap-1.5">
+                {DEMO_PRESETS.map((preset) => (
+                  <button
+                    key={preset.code}
+                    type="button"
+                    disabled={busy}
+                    onClick={() => handleSelectPreset(preset)}
+                    className="text-[11px] px-2 py-1 rounded bg-white border border-brand-200 text-brand-900 hover:bg-brand-600 hover:text-white hover:border-brand-600 transition-colors cursor-pointer"
+                  >
+                    {preset.label}
+                  </button>
+                ))}
+              </div>
             </div>}
           </aside>
           <div className="min-w-0">

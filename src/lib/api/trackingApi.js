@@ -34,9 +34,20 @@ export const trackingApi = {
     }
     // Only locally created demo orders; never look up the imported customer records.
     let orders = [];
-    try { orders = JSON.parse(localStorage.getItem('lavestreat_orders_data_v16') || '[]'); } catch {}
-    const order = orders.find(item => item.id === normalizedCode && item.demo === true &&
-      normalizePhone(item.pelanggan?.telepon) === normalizePhone(phone));
+    try { orders = JSON.parse(localStorage.getItem('lavestreat_orders_data_v17') || '[]'); } catch {}
+    if (!Array.isArray(orders) || orders.length === 0) {
+      const { initialOrders } = await import('./mockData');
+      orders = initialOrders || [];
+    }
+    const order = orders.find(item => {
+      const matchesCode = [item.id, item.invoice, item.invoice_number, item.order_id]
+        .filter(Boolean)
+        .some(c => String(c).trim().toUpperCase() === normalizedCode);
+      const matchesPhone = [item.pelanggan?.telepon, item.customer_phone, item.customer?.telepon]
+        .filter(Boolean)
+        .some(p => normalizePhone(p) === normalizePhone(phone));
+      return matchesCode && matchesPhone;
+    });
     if (!order) throw new Error(NOT_FOUND);
     return { ...projectTrackingOrder(order), demo: true };
   },

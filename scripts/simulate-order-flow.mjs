@@ -36,7 +36,7 @@ setGlobal('setTimeout', (callback, delay, ...args) => {
 dom.window.scrollTo = () => {};
 dom.window.HTMLElement.prototype.scrollIntoView = () => {};
 dom.window.HTMLElement.prototype.setPointerCapture = () => {};
-localStorage.setItem('lavestreat_orders_data_v16', '[]');
+localStorage.setItem('lavestreat_orders_data_v17', '[]');
 localStorage.setItem('lavestreat_gallery_data_v16', '[]');
 
 const beforeUrl = 'https://res.cloudinary.com/demo/image/upload/simulation-before.jpg';

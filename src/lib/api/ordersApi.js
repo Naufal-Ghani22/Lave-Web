@@ -7,7 +7,7 @@ import { galleryApi } from './galleryApi';
 import { getNextOrderStatuses } from '../constants';
 import { toIso, normalizePhone } from '../../../firebase-functions/tracking-model.mjs';
 
-const STORAGE_KEY = 'lavestreat_orders_data_v16';
+const STORAGE_KEY = 'lavestreat_orders_data_v17';
 
 function getLocalOrders() {
   try {

@@ -134,56 +134,87 @@ export function DashboardPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card rounded="2xl" className="p-4 sm:p-5 border-slate-200/80 bg-white flex items-center justify-between shadow-xs hover:border-brand-200 transition-colors">
-          <div>
-            <span className="text-xs font-semibold text-slate-500 block">Menunggu Konfirmasi</span>
-            <span className="text-2xl sm:text-3xl font-bold font-display text-brand-900 mt-1 block">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
+        {/* Card 1: Menunggu Konfirmasi */}
+        <Card rounded="2xl" className="p-4 sm:p-5 border-slate-200/80 bg-white flex flex-col justify-between shadow-xs hover:border-brand-200 transition-all min-h-[142px]">
+          <div className="flex items-start justify-between gap-2.5">
+            <span className="text-xs font-semibold text-slate-500 leading-snug">
+              Menunggu Konfirmasi
+            </span>
+            <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 border border-amber-200/60 flex items-center justify-center shrink-0">
+              <Clock className="w-4.5 h-4.5" />
+            </div>
+          </div>
+          <div className="my-1.5">
+            <span className="text-2xl sm:text-3xl font-bold font-display text-brand-900 tracking-tight block">
               {waitingOrders.length}
             </span>
-            <span className="text-[11px] text-amber-700 font-medium">Perlu segera ditinjau</span>
           </div>
-          <div className="w-11 h-11 rounded-2xl bg-amber-50 text-amber-600 border border-amber-200/60 flex items-center justify-center shrink-0">
-            <Clock className="w-5 h-5" />
+          <div className="text-[11px] text-amber-700 font-medium leading-tight">
+            Perlu segera ditinjau
           </div>
         </Card>
 
-        <Card rounded="2xl" className="p-4 sm:p-5 border-slate-200/80 bg-white flex items-center justify-between shadow-xs hover:border-brand-200 transition-colors">
-          <div>
-            <span className="text-xs font-semibold text-slate-500 block">Dalam Pengerjaan</span>
-            <span className="text-2xl sm:text-3xl font-bold font-display text-brand-900 mt-1 block">
+        {/* Card 2: Dalam Pengerjaan */}
+        <Card rounded="2xl" className="p-4 sm:p-5 border-slate-200/80 bg-white flex flex-col justify-between shadow-xs hover:border-brand-200 transition-all min-h-[142px]">
+          <div className="flex items-start justify-between gap-2.5">
+            <span className="text-xs font-semibold text-slate-500 leading-snug">
+              Dalam Pengerjaan
+            </span>
+            <div className="w-9 h-9 rounded-xl bg-sky-50 text-brand-600 border border-brand-200/60 flex items-center justify-center shrink-0">
+              <Wrench className="w-4.5 h-4.5" />
+            </div>
+          </div>
+          <div className="my-1.5">
+            <span className="text-2xl sm:text-3xl font-bold font-display text-brand-900 tracking-tight block">
               {processingOrders.length}
             </span>
-            <span className="text-[11px] text-sky-700 font-medium">Tahap jemput & cuci</span>
           </div>
-          <div className="w-11 h-11 rounded-2xl bg-sky-50 text-brand-600 border border-brand-200/60 flex items-center justify-center shrink-0">
-            <Wrench className="w-5 h-5" />
+          <div className="text-[11px] text-sky-700 font-medium leading-tight">
+            Tahap jemput & cuci
           </div>
         </Card>
 
-        <Card rounded="2xl" className="p-4 sm:p-5 border-slate-200/80 bg-white flex items-center justify-between shadow-xs hover:border-brand-200 transition-colors">
-          <div>
-            <span className="text-xs font-semibold text-slate-500 block">Sepatu Selesai Dicuci</span>
-            <span className="text-2xl sm:text-3xl font-bold font-display text-brand-900 mt-1 block">
+        {/* Card 3: Sepatu Selesai Dicuci */}
+        <Card rounded="2xl" className="p-4 sm:p-5 border-slate-200/80 bg-white flex flex-col justify-between shadow-xs hover:border-brand-200 transition-all min-h-[142px]">
+          <div className="flex items-start justify-between gap-2.5">
+            <span className="text-xs font-semibold text-slate-500 leading-snug">
+              Sepatu Selesai Dicuci
+            </span>
+            <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200/60 flex items-center justify-center shrink-0">
+              <CheckCircle2 className="w-4.5 h-4.5" />
+            </div>
+          </div>
+          <div className="my-1.5">
+            <span className="text-2xl sm:text-3xl font-bold font-display text-brand-900 tracking-tight block">
               {totalShoesCount || completedOrders.length} pasang
             </span>
-            <span className="text-[11px] text-emerald-700 font-medium">Dari {completedOrders.length} transaksi tuntas</span>
           </div>
-          <div className="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-200/60 flex items-center justify-center shrink-0">
-            <CheckCircle2 className="w-5 h-5" />
+          <div className="text-[11px] text-emerald-700 font-medium leading-tight">
+            Dari {completedOrders.length} transaksi tuntas
           </div>
         </Card>
 
-        <Card rounded="2xl" className="p-4 sm:p-5 border-slate-200/80 bg-white flex items-center justify-between shadow-xs hover:border-brand-200 transition-colors">
-          <div>
-            <span className="text-xs font-semibold text-slate-500 block">Total Omset Transaksi</span>
-            <span className="text-2xl sm:text-3xl font-bold font-display text-brand-900 mt-1 block">
+        {/* Card 4: Total Omset Transaksi */}
+        <Card rounded="2xl" className="p-4 sm:p-5 border-slate-200/80 bg-white flex flex-col justify-between shadow-xs hover:border-brand-200 transition-all min-h-[142px]">
+          <div className="flex items-start justify-between gap-2.5">
+            <span className="text-xs font-semibold text-slate-500 leading-snug">
+              Total Omset Transaksi
+            </span>
+            <div className="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 border border-brand-200/60 flex items-center justify-center shrink-0">
+              <DollarSign className="w-4.5 h-4.5" />
+            </div>
+          </div>
+          <div className="my-1.5">
+            <span 
+              className="text-xl sm:text-2xl font-bold font-display text-brand-900 tracking-tight block break-words"
+              title={formatPrice(totalRevenue)}
+            >
               {formatPrice(totalRevenue)}
             </span>
-            <span className="text-[11px] text-slate-500 font-medium">Akumulasi pesanan tercatat</span>
           </div>
-          <div className="w-11 h-11 rounded-2xl bg-brand-50 text-brand-600 border border-brand-200/60 flex items-center justify-center shrink-0">
-            <DollarSign className="w-5 h-5" />
+          <div className="text-[11px] text-slate-500 font-medium leading-tight">
+            Akumulasi pesanan tercatat
           </div>
         </Card>
       </div>
